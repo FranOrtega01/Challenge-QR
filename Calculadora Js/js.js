@@ -7,16 +7,79 @@ window.onload = function() {
     keypadButtonsArray.forEach((button) => {
         button.addEventListener("click", () => {
             calculadora(button, display);
-
         })
     })
+
+    document.addEventListener("keydown", presionarTecla);
+
+    function presionarTecla(event){
+        let teclaPresionada = event.keyCode;
+        console.log(teclaPresionada);
+
+        if (teclaPresionada == 13){
+            // calculadoraTeclado(teclaPresionada, display);
+            calcular(display);
+        }
+        if (teclaPresionada == 49 || teclaPresionada == 97){
+            actualizarTeclado(display, "1");
+        }
+        if (teclaPresionada == 50 || teclaPresionada == 98){
+            actualizarTeclado(display, "2");
+        }
+        if (teclaPresionada == 51 || teclaPresionada == 99){
+            actualizarTeclado(display, "3");
+        }
+        if (teclaPresionada == 52 || teclaPresionada == 100){
+            actualizarTeclado(display, "4");
+        }
+        if (teclaPresionada == 53 || teclaPresionada == 101){
+            actualizarTeclado(display, "5");
+        }
+        if (teclaPresionada == 54 || teclaPresionada == 102){
+            actualizarTeclado(display, "6");
+        }
+        if (teclaPresionada == 55 || teclaPresionada == 103){
+            actualizarTeclado(display, "7");
+        }
+        if (teclaPresionada == 56 || teclaPresionada == 104){
+            actualizarTeclado(display, "8");
+        }
+        if (teclaPresionada == 57 || teclaPresionada == 105){
+            actualizarTeclado(display, "9");
+        }
+        if (teclaPresionada == 48 || teclaPresionada == 96){
+            actualizarTeclado(display, "0");
+        }
+        if (teclaPresionada == 188 || teclaPresionada == 190 || teclaPresionada == 110 ){
+            actualizarTeclado(display,".");
+        }
+        if (teclaPresionada == 107){
+            actualizarTeclado(display,"+");
+        }
+        if (teclaPresionada == 109){
+            actualizarTeclado(display,"-");
+        }
+        if (teclaPresionada == 106){
+            actualizarTeclado(display,"*");
+        }
+        if (teclaPresionada == 111){
+            actualizarTeclado(display,"/");
+        }
+        if (teclaPresionada == 8){
+            if(resultado == 1){
+                borrar(display);
+            }
+            borrarUltimo(display);
+        }
+    }
 }
 
 // Declaración de los estados, para determinar si se puede o no poner un operador o coma.
 
-var operando = 0;
-var coma = 0;
-var resultado = 0;
+
+let operando = 0;
+let coma = 0;
+let resultado = 0;
 
 /*Funcionamiento de la calculadora:
 Caso "C"  => Borra el display (lo pone en cero),
@@ -36,8 +99,25 @@ function calculadora(button, display){
         case "=":
             calcular(display);
             break;
+        case "Enter":
+            calcular(display);
+            break;
         default:
             actualizar(display, button);
+            break;
+    }
+}
+
+function calculadoraTeclado(buttonTeclado, display){
+    switch(buttonTeclado){
+        case "=":
+            calcular(display);
+            break;
+        case "CE":
+            borrarUltimo(display);
+            break;
+        default:
+            borrar(display);
             break;
     }
 }
@@ -84,6 +164,8 @@ function ponerOperador(display){
     return false
 }
 
+//Funcion actualizar para click
+
 function actualizar(display, button){
 
     //Comienza preguntando si el display tiene menos de 13 dígitos, si es menor la calculadora funciona
@@ -123,14 +205,56 @@ function actualizar(display, button){
     }else{
         alert("Límite de caractéres alcanzado");
     }
-
 }
+
+//Funcion actualizar para teclado
+
+function actualizarTeclado(display, boton){
+    if(display.innerHTML.length < 13){    
+        //Si se presiona una coma (.) y el display está en cero (0), el display cambia a ".", es decir, comienza un número decimal. Además, cambia el estado de coma a 1, así no se pueden escribir dos comas juntas.
+        if(boton == "." && display.innerHTML == 0){
+            display.innerHTML = ".";
+            coma = 1;
+    
+        //Si el display está en 0 o resultado está en 1, resetea las variables
+        }else if((display.innerHTML == 0 || resultado == 1)){
+            display.innerHTML = "";
+            resultado = 0;
+            coma = 0;
+            operando = 0;
+    
+        }//Si se presiona la coma, y ésta está en estado cero (0), se escribe una coma y su estado cambia a uno (1) así no se pueden escribir dos comas juntas 
+        if(boton == "." && coma == 0 ){
+            display.innerHTML += boton;
+            coma = 1;
+        }//Si se presiona un número, lo escribe en el display
+        if (boton !== "." && boton !== "+" && boton !== "-" && boton !== "*" && boton !== "/"  ){
+            display.innerHTML += boton; //Al display le suma el valor (en string) del botón
+        }
+        
+    
+        //Pregunta si toque algún operador y de ser así, llama a ponerOperador, si ésta es True (explicado más arriba), escribe el operador.
+        if ((boton == "+" || boton == "-" || boton == "*" || boton == "/") && ponerOperador(display)){
+            display.innerHTML += boton;
+            coma = 0;
+        }
+        if (display.innerHTML == 0){
+            display.innerHTML = 0;
+        }
+    }
+    else{
+        alert("Límite de caractéres alcanzado!")
+    }
+}
+
+//Borrar: pone el display en cero y los estados de coma y operando en cero (0)
 function borrar(display,button){
-    //Pone el display en cero y los estados de coma y operando en cero (0)
+
     display.innerHTML = 0;
     coma = 0;
     operando = 0;
 }
+
 function borrarUltimo(display,button){
     //Si el ultimo número es una coma (.), lo borra y cambia el estado de coma a cero (0)
     if(display.innerHTML.charAt(display.innerHTML.length-1) == "."){

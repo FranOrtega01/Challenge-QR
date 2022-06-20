@@ -11,7 +11,7 @@ body {
 
 h1 {
   font-size: 60px;
-  margin: 20px;
+  margin: 20px 0;
   text-align: center;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   -webkit-text-stroke-width: 1.5px;
@@ -89,10 +89,20 @@ h1 {
   justify-content: center;
   align-items: center; }
 
-.sign {
-  margin-top: 15px;
-  color: black;
-  text-decoration: none; }
+.footer {
+  margin-top: 10px; }
+  .footer p {
+    margin-top: 5px;
+    color: #101010;
+    text-align: center; }
+  .footer i {
+    margin: 0 5px; }
+  .footer a {
+    color: #101010;
+    text-decoration: none; }
+    .footer a:hover {
+      color: #bb7700; }
 
-.sign a {
-  color: #c5c5c5; }
+@media (max-width: 768px) {
+  h1 {
+    font-size: 45px; } }
